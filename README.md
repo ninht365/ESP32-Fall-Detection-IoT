@@ -18,4 +18,4 @@ Wearable IoT Fall Detection &amp; Health Monitoring system using ESP32-S3, MAX30
 *   **Cloud/Backend:** HiveMQ Broker, Firebase
 
 ## 🎥 Video Demo
-[![Watch the video](https://drive.google.com/file/d/1pKgG8LQ315uCQ7WLP3eOXYklbpnuRJRS/view?usp=sharing)
+[Video Demo on Google Drive](https://drive.google.com/file/d/1pKgG8LQ315uCQ7WLP3eOXYklbpnuRJRS/view?usp=sharing)
