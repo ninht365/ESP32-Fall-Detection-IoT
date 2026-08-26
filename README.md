@@ -41,11 +41,16 @@ Hệ thống nhúng giám sát sức khỏe toàn diện và tự động phát 
 
 Thuật toán hoạt động dựa trên mô hình máy trạng thái 5 pha kết hợp lọc trung bình động lũy thừa (EMA Filter):
 - **Công thức tính độ lớn tổng (Magnitude)**:
-  - $\text{accMag} = \sqrt{a_x^2 + a_y^2 + a_z^2} \quad (g)$
-  - $\text{gyroMag} = \sqrt{g_x^2 + g_y^2 + g_z^2} \quad (^\circ/s)$
+
+$$\text{accMag} = \sqrt{a_x^2 + a_y^2 + a_z^2} \quad (g)$$
+
+$$\text{gyroMag} = \sqrt{g_x^2 + g_y^2 + g_z^2} \quad (^\circ/s)$$
+
 - **Lọc EMA ($\alpha = 0.6$)**:
-  - $\mathrm{accMag}_{\mathrm{filtered}}[k] = 0.4 \times \mathrm{accMag}_{\mathrm{filtered}}[k-1] + 0.6 \times \mathrm{accMag}_{\mathrm{raw}}[k]$
-  *(Trong đó: k là mẫu hiện tại, k-1 là mẫu đã lọc ở bước trước đó)*
+
+$$\text{accMag}_{\text{filtered}}[k] = 0.4 \times \text{accMag}_{\text{filtered}}[k-1] + 0.6 \times \text{accMag}_{\text{raw}}[k]$$
+
+*(Trong đó: $k$ là mẫu hiện tại, $k-1$ là mẫu đã lọc ở bước trước đó)*
 
 #### 🔄 Sơ đồ máy trạng thái phát hiện té ngã:
 
