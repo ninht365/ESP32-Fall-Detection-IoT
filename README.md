@@ -50,7 +50,7 @@ Thuật toán hoạt động dựa trên mô hình máy trạng thái 5 pha kế
 
 <div align="center">
 
-![Sơ đồ 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)](StatusPhrases.png)
+![Sơ đồ 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)](PhrasesStatus.svg)
 
 **Hình 1**: *Sơ đồ chuyển đổi 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)*
 
@@ -117,8 +117,8 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 .
 ├── platformio.ini         # Cấu hình biên dịch PlatformIO cho ESP32-S3 (4MB Flash, USB CDC)
 ├── README.md              # Tài liệu chi tiết dự án
-├── StatusPhrases.png      # Sơ đồ các pha trạng thái phát hiện té ngã
-├── Structure.png          # Sơ đồ kiến trúc phần mềm hệ thống
+├── PhrasesStatus.svg      # Sơ đồ các pha trạng thái phát hiện té ngã (Vector SVG)
+├── structure.svg          # Sơ đồ kiến trúc phần mềm hệ thống (Vector SVG)
 └── src/
     ├── config.h               # Tập trung toàn bộ #define (Pin, Wi-Fi, MQTT, Ngưỡng thuật toán)
     ├── shared_state.h         # Khai báo Struct dữ liệu, biến toàn cục extern, Mutex & Utility
@@ -150,7 +150,7 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 
 <div align="center">
 
-![Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware](Structure.png)
+![Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware](structure.svg)
 
 **Hình 2**: *Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware*
 
