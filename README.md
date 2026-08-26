@@ -44,7 +44,8 @@ Thuật toán hoạt động dựa trên mô hình máy trạng thái 5 pha kế
   $$\text{accMag} = \sqrt{a_x^2 + a_y^2 + a_z^2} \quad (g)$$
   $$\text{gyroMag} = \sqrt{g_x^2 + g_y^2 + g_z^2} \quad (^\circ/s)$$
 - **Lọc EMA (Alpha = 0.6)**:
-  $$\text{filtered\_accMag} = 0.4 \times \text{filtered\_accMag} + 0.6 \times \text{accMag}$$
+  $$\text{accMag}_{\text{filtered}}[k] = 0.4 \times \text{accMag}_{\text{filtered}}[k-1] + 0.6 \times \text{accMag}_{\text{raw}}[k]$$
+  *(Trong đó: $k$ là mẫu hiện tại, $k-1$ là mẫu đã lọc ở bước trước đó)*
 
 #### 🔄 Sơ đồ máy trạng thái phát hiện té ngã:
 
@@ -135,14 +136,14 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 
 | Module | Tệp tin | Nhiệm vụ chính |
 |---|---|---|
-| **Config** | [`src/config.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/config.h) | Chứa tất cả các hằng số `#define`: chân SDA/SCL, thông số WiFi, TLS MQTT, các ngưỡng gia tốc/thời gian té ngã, cấu hình MAX30102 và LM75. |
-| **Shared State** | [`src/shared_state.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/shared_state.h)<br>[`src/shared_state.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/shared_state.cpp) | Định nghĩa các struct `HealthData`, `SensorData`, `FilteredData`. Quản lý `healthMutex`, `i2cMutex` và các cờ trạng thái `wifiOk`, `mqttOk`. |
-| **MPU6050** | [`src/mpu6050_module.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/mpu6050_module.h)<br>[`src/mpu6050_module.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/mpu6050_module.cpp) | Ẩn đối tượng `MPU6050` trong cpp scope. Thực hiện quy đổi đơn vị thô ra $g$ và $^\circ/s$, tính vector gia tốc tổng và áp dụng lọc EMA. |
-| **LM75** | [`src/lm75_module.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/lm75_module.h)<br>[`src/lm75_module.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/lm75_module.cpp) | Tự động quét tìm địa chỉ I2C của LM75 trong dải `0x48`–`0x4F`, đọc giá trị thanh ghi nhiệt độ theo chu kỳ 5 giây. |
-| **MAX30102** | [`src/max30102_module.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/max30102_module.h)<br>[`src/max30102_module.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/max30102_module.cpp) | Khởi tạo cảm biến MAX30102, chạy `TaskMAX30102` trên Core 0. Thực hiện lọc Median 5 phần tử cho nhịp tim và cửa sổ trượt SpO2. |
-| **Fall Detection** | [`src/fall_detection.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/fall_detection.h)<br>[`src/fall_detection.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/fall_detection.cpp) | Thực thi máy trạng thái 5 pha (IDLE ➔ FREE_FALL ➔ IMPACT ➔ WAITING_STILL ➔ COOLDOWN). Kích hoạt lệnh gửi cảnh báo khẩn cấp khi xác nhận té ngã. |
-| **MQTT Manager** | [`src/mqtt_manager.h`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/mqtt_manager.h)<br>[`src/mqtt_manager.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/mqtt_manager.cpp) | Quản lý kết nối WiFi STA (quét mạng 2.4GHz), TLS Socket với `WiFiClientSecure`, tạo kết nối MQTT bảo mật, tự động reconnect và serialize dữ liệu JSON bằng `ArduinoJson`. |
-| **Main Entry** | [`src/main.cpp`](file:///c:/Users/ADMIN/Downloads/elder_care_firmware/src/main.cpp) | Đơn giản hóa điểm vào hệ thống. Hàm `setup()` khởi tạo tuần tự các module; hàm `loop()` điều phối đọc cảm biến, gọi state machine và in log định kỳ. |
+| **Config** | [`src/config.h`] | Chứa tất cả các hằng số `#define`: chân SDA/SCL, thông số WiFi, TLS MQTT, các ngưỡng gia tốc/thời gian té ngã, cấu hình MAX30102 và LM75. |
+| **Shared State** | [`src/shared_state.h`]<br>[`src/shared_state.cpp`] | Định nghĩa các struct `HealthData`, `SensorData`, `FilteredData`. Quản lý `healthMutex`, `i2cMutex` và các cờ trạng thái `wifiOk`, `mqttOk`. |
+| **MPU6050** | [`src/mpu6050_module.h`]<br>[`src/mpu6050_module.cpp`] | Ẩn đối tượng `MPU6050` trong cpp scope. Thực hiện quy đổi đơn vị thô ra $g$ và $^\circ/s$, tính vector gia tốc tổng và áp dụng lọc EMA. |
+| **LM75** | [`src/lm75_module.h`]<br>[`src/lm75_module.cpp`] | Tự động quét tìm địa chỉ I2C của LM75 trong dải `0x48`–`0x4F`, đọc giá trị thanh ghi nhiệt độ theo chu kỳ 5 giây. |
+| **MAX30102** | [`src/max30102_module.h`]<br>[`src/max30102_module.cpp`] | Khởi tạo cảm biến MAX30102, chạy `TaskMAX30102` trên Core 0. Thực hiện lọc Median 5 phần tử cho nhịp tim và cửa sổ trượt SpO2. |
+| **Fall Detection** | [`src/fall_detection.h`]<br>[`src/fall_detection.cpp`] | Thực thi máy trạng thái 5 pha (IDLE ➔ FREE_FALL ➔ IMPACT ➔ WAITING_STILL ➔ COOLDOWN). Kích hoạt lệnh gửi cảnh báo khẩn cấp khi xác nhận té ngã. |
+| **MQTT Manager** | [`src/mqtt_manager.h`]<br>[`src/mqtt_manager.cpp`] | Quản lý kết nối WiFi STA (quét mạng 2.4GHz), TLS Socket với `WiFiClientSecure`, tạo kết nối MQTT bảo mật, tự động reconnect và serialize dữ liệu JSON bằng `ArduinoJson`. |
+| **Main Entry** | [`src/main.cpp`] | Đơn giản hóa điểm vào hệ thống. Hàm `setup()` khởi tạo tuần tự các module; hàm `loop()` điều phối đọc cảm biến, gọi state machine và in log định kỳ. |
 
 ---
 
