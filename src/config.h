@@ -19,7 +19,7 @@
 // ─────────────────────────────────────────────
 #define ENABLE_WIFI 1
 
-#define WIFI_SSID           "WIFI NAME"
+#define WIFI_SSID           "SSID"
 #define WIFI_PASSWORD       "PASSWORD"
 #define WIFI_TIMEOUT_MS     20000UL
 #define WIFI_CHECK_INTERVAL 30000UL
