@@ -46,20 +46,17 @@ Thuật toán hoạt động dựa trên mô hình máy trạng thái 5 pha kế
 - **Lọc EMA (Alpha = 0.6)**:
   $$\text{filtered\_accMag} = 0.4 \times \text{filtered\_accMag} + 0.6 \times \text{accMag}$$
 
-#### 🔄 Các pha trạng thái:
+#### 🔄 Sơ đồ máy trạng thái phát hiện té ngã:
 
-```mermaid
-stateDiagram-v2
-    [*] --> PHASE_IDLE
-    PHASE_IDLE --> PHASE_FREE_FALL: accMag < 0.3g
-    PHASE_FREE_FALL --> PHASE_IDLE: Thời gian rơi < 100ms hoặc > 1000ms
-    PHASE_FREE_FALL --> PHASE_IMPACT: 100ms ≤ Thời gian rơi ≤ 1000ms
-    PHASE_IMPACT --> PHASE_IDLE: Timeout > 1000ms (Không có va chạm)
-    PHASE_IMPACT --> PHASE_WAITING_STILL: accMag > 2.5g (Phát hiện va chạm)
-    PHASE_WAITING_STILL --> PHASE_IDLE: Timeout > 3000ms (Nạn nhân vẫn di chuyển)
-    PHASE_WAITING_STILL --> PHASE_COOLDOWN: Đứng yên liên tục ≥ 2000ms ➔ GỬI CẢNH BÁO
-    PHASE_COOLDOWN --> PHASE_IDLE: Sau 3000ms Cooldown
-```
+<div align="center">
+
+![Sơ đồ 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)](StatusPhrases.png)
+
+**Hình 1**: *Sơ đồ chuyển đổi 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)*
+
+</div>
+
+<br>
 
 | Thông số cấu hình | Giá trị | Ý nghĩa |
 |---|---|---|
@@ -120,6 +117,8 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 .
 ├── platformio.ini         # Cấu hình biên dịch PlatformIO cho ESP32-S3 (4MB Flash, USB CDC)
 ├── README.md              # Tài liệu chi tiết dự án
+├── StatusPhrases.png      # Sơ đồ các pha trạng thái phát hiện té ngã
+├── Structure.png          # Sơ đồ kiến trúc phần mềm hệ thống
 └── src/
     ├── config.h               # Tập trung toàn bộ #define (Pin, Wi-Fi, MQTT, Ngưỡng thuật toán)
     ├── shared_state.h         # Khai báo Struct dữ liệu, biến toàn cục extern, Mutex & Utility
@@ -149,50 +148,13 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 
 ## 🛠 SƠ ĐỒ KIẾN TRÚC PHẦN MỀM
 
-```mermaid
-flowchart TD
-    subgraph Hardware ["Lớp Phần Cứng (Hardware Layer)"]
-        MPU["MPU6050 (IMU 6 trục)"]
-        LM75["LM75 (Cảm biến Nhiệt độ)"]
-        MAX["MAX30102 (Nhịp tim & SpO2)"]
-    end
+<div align="center">
 
-    subgraph Synchronization ["FreeRTOS Synchronization"]
-        I2C_MUTEX[["🔒 i2cMutex (I2C Bus Lock)"]]
-        HEALTH_MUTEX[["🔒 healthMutex (Data Lock)"]]
-    end
+![Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware](Structure.png)
 
-    subgraph Core0 ["Core 0 - FreeRTOS Task Dedicated"]
-        MAX_TASK["TaskMAX30102 (16KB Stack)\n- Peak Detection (RR-Interval)\n- Median Filter 5\n- Maxim SpO2 Sliding Window"]
-    end
+**Hình 2**: *Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware*
 
-    subgraph Core1 ["Core 1 - System Loop Task"]
-        MPU_MOD["mpu6050_module\n- Đọc raw ax,ay,az,gx,gy,gz\n- Lọc EMA (α=0.6)"]
-        LM75_MOD["lm75_module\n- Đọc nhiệt độ 5000ms/lần"]
-        FALL_MOD["fall_detection\n- State Machine 5 pha"]
-        MAIN_LOOP["main.cpp loop()\n- Đọc sensor & gọi handlers\n- In log Serial 3s/lần"]
-    end
-
-    subgraph Network ["Network & Cloud Layer"]
-        MQTT_MOD["mqtt_manager\n- WiFi STA (2.4GHz)\n- WiFiClientSecure (TLS)\n- PubSubClient (Port 8883)\n- ArduinoJson Serializer"]
-        MQTT_BROKER[("HiveMQ Cloud Broker\nTopic: eldercare/test_nga")]
-    end
-
-    %% Data flow connections
-    MPU -- I2C Read --> I2C_MUTEX --> MPU_MOD
-    LM75 -- I2C Read --> I2C_MUTEX --> LM75_MOD
-    MAX -- I2C Read --> I2C_MUTEX --> MAX_TASK
-
-    MPU_MOD --> FALL_MOD
-    LM75_MOD -- Cập nhật bodyTemp --> HEALTH_MUTEX
-    MAX_TASK -- Cập nhật HR & SpO2 --> HEALTH_MUTEX
-
-    FALL_MOD -- Té ngã khẩn cấp --> MQTT_MOD
-    MAIN_LOOP -- Định kỳ (1Hz) --> MQTT_MOD
-    HEALTH_MUTEX -- Snapshot sinh hiệu --> MQTT_MOD
-
-    MQTT_MOD -- Publish JSON Payload --> MQTT_BROKER
-```
+</div>
 
 ---
 
