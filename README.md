@@ -134,7 +134,7 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
     ├── max30102_module.h/.cpp # FreeRTOS Task đo nhịp tim, SpO2 & thuật toán lọc Median
     ├── fall_detection.h/.cpp  # State machine 5 pha phát hiện té ngã
     ├── mqtt_manager.h/.cpp    # Quản lý WiFi, kết nối TLS MQTT & đóng gói JSON publish
-    └── main.cpp               # Hàm setup() khởi tạo và loop() điều phối gọn nhẹ (~70 dòng)
+    └── main.cpp               # Hàm setup() khởi tạo và loop() điều phối gọn nhẹ
 ```
 
 ### 📄 Mô tả nhiệm vụ chi tiết của từng Module:
