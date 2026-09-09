@@ -26,7 +26,7 @@ Hệ thống nhúng giám sát sức khỏe toàn diện và tự động phát 
   * Nhịp tim (Heart Rate - BPM) và Nồng độ Oxy trong máu (SpO2 - %) thông qua cảm biến quang học MAX30102.
   * Nhiệt độ cơ thể (°C) thông qua cảm biến nhiệt độ LM75.
 * **Kết nối IoT Bảo mật**:
-  * Tự động quét và duy trì kết nối WiFi 2.4GHz với cơ chế tự khôi phục (Auto-reconnect).
+  * Tự động quét và duy trì kết nối WiFi 2.4GHz với cơ chế tự khôi phục.
   * Kết nối tới HiveMQ Cloud Broker qua cổng bảo mật TLS/SSL (`8883`).
   * Sinh Client ID ngẫu nhiên cho từng thiết bị để tránh xung đột kết nối.
 * **Tối ưu hóa đa nhân ESP32-S3 (Dual-Core)**:
