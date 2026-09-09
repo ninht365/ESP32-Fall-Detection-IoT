@@ -162,7 +162,7 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
   <img alt="Sơ đồ kiến trúc phần mềm hệ thống Elder Care Firmware" src="system_architecture_dark.svg" width="100%">
 </picture>
 
-**Hình 2**: *Sơ đồ kiến trúc tổng quan 3 tuyến dữ liệu song song (Tự động thích ứng Dark/Light Mode chuẩn Vector SVG)*
+**Hình 2**: *Sơ đồ kiến trúc tổng quan 3 tuyến dữ liệu song song*
 
 </div>
 
