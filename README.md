@@ -156,9 +156,13 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
 
 <div align="center">
 
-![Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware](structure.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="system_architecture_dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="system_architecture_light.svg">
+  <img alt="Sơ đồ kiến trúc phần mềm hệ thống Elder Care Firmware" src="system_architecture_dark.svg" width="100%">
+</picture>
 
-**Hình 2**: *Sơ đồ kiến trúc tổng quan các module phần mềm và luồng dữ liệu hệ thống Elder Care Firmware*
+**Hình 2**: *Sơ đồ kiến trúc tổng quan 3 tuyến dữ liệu song song (Tự động thích ứng Dark/Light Mode chuẩn Vector SVG)*
 
 </div>
 
