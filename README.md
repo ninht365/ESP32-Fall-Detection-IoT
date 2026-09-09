@@ -56,7 +56,11 @@ $$\text{accMag}_{\text{filtered}}[k] = 0.4 \times \text{accMag}_{\text{filtered}
 
 <div align="center">
 
-![Sơ đồ 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)](PhrasesStatus.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="PhrasesStatus_dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="PhrasesStatus_light.svg">
+  <img alt="Sơ đồ 5 pha trạng thái phát hiện té ngã" src="PhrasesStatus_dark.svg" width="100%">
+</picture>
 
 **Hình 1**: *Sơ đồ chuyển đổi 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)*
 
