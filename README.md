@@ -62,7 +62,7 @@ $$\text{accMag}_{\text{filtered}}[k] = 0.4 \times \text{accMag}_{\text{filtered}
   <img alt="Sơ đồ 5 pha trạng thái phát hiện té ngã" src="PhrasesStatus_dark.svg" width="100%">
 </picture>
 
-**Hình 1**: *Sơ đồ chuyển đổi 5 pha trạng thái phát hiện té ngã (Fall Detection State Machine)*
+**Hình 1**: *Sơ đồ chuyển đổi 5 pha trạng thái phát hiện té ngã.*
 
 </div>
 
@@ -166,7 +166,7 @@ Mã nguồn được thiết kế theo nguyên tắc **Single Responsibility Pri
   <img alt="Sơ đồ kiến trúc phần mềm hệ thống Elder Care Firmware" src="system_architecture_dark.svg" width="100%">
 </picture>
 
-**Hình 2**: *Sơ đồ kiến trúc tổng quan 3 tuyến dữ liệu song song*
+**Hình 2**: *Sơ đồ tổng quan kiến trúc phần mềm.*
 
 </div>
 
